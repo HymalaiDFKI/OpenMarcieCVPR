@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>OpenMarcie | CVPR 2026</title>
+	<meta name="description" content="OpenMarcie: Dataset for Multimodal Action Recognition in Industrial Environments" />
+	<style>
+		:root {
+			--bg: #f7f8fc;
+			--card: #ffffff;
+			--text: #111827;
+			--muted: #4b5563;
+			--line: #e5e7eb;
+			--primary: #2563eb;
+			--primary-dark: #1d4ed8;
+			--accent: #eef2ff;
+			--shadow: 0 12px 30px rgba(17, 24, 39, 0.08);
+			--radius: 16px;
+			--max: 1040px;
+		}
+
+		* { box-sizing: border-box; }
+
+		body {
+			margin: 0;
+			font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+			color: var(--text);
+			background: linear-gradient(180deg, #eef2ff 0%, var(--bg) 28%);
+			line-height: 1.6;
+			scroll-behavior: smooth;
+		}
+
+		a { color: var(--primary); text-decoration: none; }
+		a:hover { color: var(--primary-dark); }
+
+		.container {
+			width: min(var(--max), calc(100% - 2rem));
+			margin: 0 auto;
+		}
+
+		.hero {
+			padding: 4.5rem 0 2.5rem;
+			text-align: center;
+		}
+
+		.venue {
+			display: inline-block;
+			background: var(--accent);
+			color: #3730a3;
+			border: 1px solid #c7d2fe;
+			border-radius: 999px;
+			padding: 0.35rem 0.8rem;
+			font-weight: 600;
+			font-size: 0.9rem;
+			margin-bottom: 1rem;
+		}
+
+		h1 {
+			margin: 0 0 1rem;
+			font-size: clamp(1.8rem, 3.2vw, 3rem);
+			line-height: 1.2;
+			letter-spacing: -0.02em;
+		}
+
+		.authors {
+			font-size: 1.05rem;
+			color: var(--muted);
+			max-width: 900px;
+			margin: 0 auto 0.5rem;
+		}
+
+		.affiliations {
+			color: #6b7280;
+			font-size: 0.95rem;
+			margin-bottom: 1.4rem;
+		}
+
+		.logo-strip {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			gap: 1rem;
+			flex-wrap: wrap;
+			margin: 0.8rem 0 1rem;
+		}
+
+		.logo-item {
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			padding: 0.45rem 0.75rem;
+			background: #fff;
+			border: 1px solid var(--line);
+			border-radius: 12px;
+			min-height: 168px;
+		}
+
+		.logo-item img {
+			height: 90px;
+			width: auto;
+			display: block;
+		}
+
+		.logo-item.cvpr {
+			background: #111827;
+			border-color: #374151;
+		}
+
+		.links {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 0.65rem;
+			justify-content: center;
+			margin-top: 1.2rem;
+			animation: fadeUp 0.7s ease both;
+		}
+
+		.btn {
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			border-radius: 12px;
+			padding: 0.65rem 0.95rem;
+			border: 1px solid var(--line);
+			background: #fff;
+			color: #111827;
+			font-weight: 600;
+			font-size: 0.95rem;
+			transition: all 0.2s ease;
+		}
+
+		.btn:hover {
+			border-color: #bfdbfe;
+			transform: translateY(-1px);
+			box-shadow: 0 8px 20px rgba(37, 99, 235, 0.15);
+			color: #111827;
+		}
+
+		.btn.primary {
+			background: var(--primary);
+			color: #fff;
+			border-color: var(--primary);
+		}
+
+		.btn.primary:hover {
+			background: var(--primary-dark);
+			border-color: var(--primary-dark);
+			color: #fff;
+		}
+
+		.section {
+			margin: 1.2rem 0;
+			background: var(--card);
+			border: 1px solid var(--line);
+			border-radius: var(--radius);
+			box-shadow: var(--shadow);
+			padding: 1.35rem 1.35rem 1.45rem;
+			animation: fadeUp 0.7s ease both;
+		}
+
+		.section h2 {
+			margin: 0 0 0.75rem;
+			font-size: 1.35rem;
+			letter-spacing: -0.01em;
+		}
+
+		.teaser {
+			border: 1px dashed #cbd5e1;
+			border-radius: 14px;
+			background: linear-gradient(135deg, #f8fafc, #eef2ff);
+			padding: 1.6rem;
+			text-align: center;
+			color: #334155;
+			font-size: 0.98rem;
+		}
+
+		.teaser-media {
+			margin-top: 1rem;
+			border: 1px solid var(--line);
+			border-radius: 12px;
+			overflow: hidden;
+			background: #fff;
+		}
+
+		.teaser-media object {
+			display: block;
+			width: 100%;
+			height: 540px;
+			border: 0;
+		}
+
+		.teaser-media img {
+			display: block;
+			width: 100%;
+			height: auto;
+			object-fit: contain;
+			background: #fff;
+			transition: transform 0.35s ease;
+		}
+
+		.teaser-media:hover img {
+			transform: scale(1.015);
+		}
+
+		.teaser-caption {
+			font-size: 0.9rem;
+			color: #6b7280;
+			margin-top: 0.55rem;
+		}
+
+		.figure-grid {
+			display: grid;
+			grid-template-columns: 1fr;
+			gap: 1rem;
+			margin-top: 0.8rem;
+		}
+
+		.figure-card {
+			border: 1px solid var(--line);
+			border-radius: 12px;
+			padding: 0.8rem;
+			background: #fcfdff;
+			transition: transform 0.25s ease, box-shadow 0.25s ease;
+		}
+
+		.figure-card:hover {
+			transform: translateY(-3px);
+			box-shadow: 0 10px 24px rgba(37, 99, 235, 0.12);
+		}
+
+		.figure-card h3 {
+			margin: 0 0 0.5rem;
+			font-size: 1rem;
+			color: #1f2937;
+		}
+
+		.figure-frame {
+			border: 1px solid var(--line);
+			border-radius: 10px;
+			overflow: hidden;
+			background: #fff;
+		}
+
+		.figure-frame object {
+			display: block;
+			width: 100%;
+			height: 420px;
+			border: 0;
+		}
+
+		.figure-frame img {
+			display: block;
+			width: 100%;
+			height: auto;
+			object-fit: contain;
+			background: #fff;
+			transition: transform 0.35s ease;
+		}
+
+		.figure-frame:hover img {
+			transform: scale(1.01);
+		}
+
+		.figure-note {
+			margin-top: 0.5rem;
+			font-size: 0.86rem;
+			color: #6b7280;
+		}
+
+		.grid {
+			display: grid;
+			grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+			gap: 0.8rem;
+			margin-top: 0.8rem;
+		}
+
+		.mini-card {
+			border: 1px solid var(--line);
+			border-radius: 12px;
+			padding: 0.85rem;
+			background: #fcfdff;
+		}
+
+		.mini-card h3 {
+			margin: 0 0 0.4rem;
+			font-size: 0.98rem;
+			color: #1f2937;
+		}
+
+		.mini-card p {
+			margin: 0;
+			color: #4b5563;
+			font-size: 0.93rem;
+		}
+
+		.stats {
+			display: grid;
+			grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+			gap: 0.7rem;
+			margin-top: 0.9rem;
+		}
+
+		.stat {
+			background: #f9fafb;
+			border: 1px solid var(--line);
+			border-radius: 12px;
+			padding: 0.75rem;
+			text-align: center;
+			transition: transform 0.2s ease, box-shadow 0.2s ease;
+		}
+
+		.stat:hover {
+			transform: translateY(-2px);
+			box-shadow: 0 8px 18px rgba(17, 24, 39, 0.08);
+		}
+
+		@keyframes fadeUp {
+			from {
+				opacity: 0;
+				transform: translateY(10px);
+			}
+			to {
+				opacity: 1;
+				transform: translateY(0);
+			}
+		}
+
+		@media (prefers-reduced-motion: reduce) {
+			* {
+				animation: none !important;
+				transition: none !important;
+			}
+		}
+
+		.stat .value {
+			font-size: 1.2rem;
+			font-weight: 800;
+			color: #1d4ed8;
+			line-height: 1.2;
+		}
+
+		.stat .label {
+			color: #6b7280;
+			font-size: 0.8rem;
+			margin-top: 0.15rem;
+			text-transform: uppercase;
+			letter-spacing: 0.04em;
+		}
+
+		pre {
+			margin: 0;
+			padding: 0.95rem;
+			border-radius: 12px;
+			border: 1px solid var(--line);
+			background: #111827;
+			color: #e5e7eb;
+			overflow-x: auto;
+			font-size: 0.86rem;
+			line-height: 1.45;
+		}
+
+		footer {
+			color: #6b7280;
+			text-align: center;
+			padding: 1.1rem 0 2.2rem;
+			font-size: 0.9rem;
+		}
+
+		@media (max-width: 620px) {
+			.hero { padding-top: 3rem; }
+			.section { padding: 1rem; }
+			.authors { font-size: 0.98rem; }
+			.logo-item { min-height: 108px; }
+			.logo-item img { height: 54px; }
+			.figure-grid { grid-template-columns: 1fr; }
+		}
+	</style>
+</head>
+<body>
+	<header class="hero">
+		<div class="container">
+			<div class="logo-strip">
+				<a class="logo-item" href="https://www.dfki.de/en/web" target="_blank" rel="noopener" aria-label="DFKI">
+					<img src="assets/logos/dfki_Logo_digital_black.png" alt="DFKI logo" loading="lazy" />
+				</a>
+				<a class="logo-item cvpr" href="https://cvpr.thecvf.com/" target="_blank" rel="noopener" aria-label="CVPR 2026">
+					<img src="assets/logos/cvpr-navbar-logo.svg" alt="CVPR logo" loading="lazy" />
+				</a>
+				<a class="logo-item" href="https://www.korea.ac.kr/mbshome/mbs/universityen/index.do" target="_blank" rel="noopener" aria-label="Korea University">
+					<img src="assets/logos/Korea_University_Global_Symbol.svg.png" alt="Korea University logo" loading="lazy" />
+				</a>
+			</div>
+			<h1>OpenMarcie: Dataset for Multimodal Action Recognition in Industrial Environments</h1>
+			<div class="authors">
+				Hymalai Bello, Lala Ray, Joanna Sorysz, Sungho Suh, Paul Lukowicz
+			</div>
+			<div class="affiliations">
+				DFKI Kaiserslautern · RPTU Kaiserslautern-Landau · Korea University
+			</div>
+			<div class="links">
+				<a class="btn primary" href="OpenMarcie_CVPR26-1.pdf" target="_blank" rel="noopener">📄 Paper</a>
+				<a class="btn" href="https://arxiv.org/abs/2603.02390" target="_blank" rel="noopener">🧠 arXiv</a>
+				<a class="btn" href="https://github.com/HymalaiDFKI/OpenMarcie" target="_blank" rel="noopener">💻 Code</a>
+				<a class="btn" href="https://projects.dfki.uni-kl.de/open-marcie/" target="_blank" rel="noopener">🗃️ Dataset</a>
+				<a class="btn" href="#summary">🧩 Summary</a>
+				<a class="btn" href="#citation">📚 BibTeX</a>
+			</div>
+		</div>
+	</header>
+
+	<main class="container">
+		<section class="section" id="teaser">
+			<h2>Teaser</h2>
+			<div class="teaser">
+				<strong>OpenMarcie</strong> introduces a large-scale multimodal action dataset for manufacturing,
+				combining egocentric and exocentric vision with wearable sensing and audio.
+				<div class="teaser-media">
+					<a href="assets/figures/Marcie1.png" target="_blank" rel="noopener">
+						<img src="assets/figures/Marcie1.png" alt="OpenMarcie teaser figure" loading="lazy" />
+					</a>
+				</div>
+				<div class="teaser-caption">OpenMarcie teaser figure.</div>
+			</div>
+		</section>
+
+		<section class="section" id="materials">
+			<h2>Project Materials</h2>
+			<p>
+				Resources for paper reading, dataset access, and official implementation.
+			</p>
+			<div class="grid">
+				<article class="mini-card">
+					<h3>Paper</h3>
+					<p><a href="https://arxiv.org/abs/2603.02390" target="_blank" rel="noopener">arXiv: 2603.02390</a><br />
+					<a href="OpenMarcie_CVPR26-1.pdf" target="_blank" rel="noopener">PDF Paper</a></p>
+				</article>
+				<article class="mini-card">
+					<h3>Dataset (Single + Multi)</h3>
+					<p>
+						<strong>Single link:</strong><br />
+						<a href="https://projects.dfki.uni-kl.de/open-marcie/" target="_blank" rel="noopener">projects.dfki.uni-kl.de/open-marcie</a><br />
+						User: reviewer<br />
+						Password: 1234<br /><br />
+						<strong>Multi links:</strong><br />
+						<a href="https://www.kaggle.com/datasets/4942046dbb2608f5a0c3e76c9bd53c6b9b2784d738da7db37f7739b89c2c7f95" target="_blank" rel="noopener">Kaggle Part 1</a><br />
+						<a href="https://www.kaggle.com/datasets/9707fa8bcc1441bc7794afd43c64af8462487db326448e24a015740e218af2cb?_gl=1*uglnn6*_ga*ODQ1NTc4Mjk4LjE3NzIzODMyOTA.*_ga_T7QHS60L4Q*czE3NzI3MTE3NTckbzIkZzEkdDE3NzI3MTE3NTgkajU5JGwwJGgw" target="_blank" rel="noopener">Kaggle Part 2</a><br />
+						<a href="https://www.kaggle.com/datasets/106440bd5392b49fc4b732a8205f768af76db808cd70a94f4aa1b7ded115eb21?_gl=1*8d22yq*_ga*ODQ1NTc4Mjk4LjE3NzIzODMyOTA.*_ga_T7QHS60L4Q*czE3NzI3MTE3NTckbzIkZzEkdDE3NzI3MTE3NjQkajUzJGwwJGgw" target="_blank" rel="noopener">Kaggle Part 3</a><br />
+						<a href="https://www.kaggle.com/datasets/4a3e662eeea0e2fbeec209f9c617da36aa057186221b017ec39564ba74d781bf?_gl=1*1d151wi*_ga*ODQ1NTc4Mjk4LjE3NzIzODMyOTA.*_ga_T7QHS60L4Q*czE3NzI3MTE3NTckbzIkZzEkdDE3NzI3MTI0MTEkajQ3JGwwJGgw" target="_blank" rel="noopener">Kaggle Part 4</a>
+					</p>
+				</article>
+				<article class="mini-card">
+					<h3>Code</h3>
+					<p><a href="https://github.com/HymalaiDFKI/OpenMarcie" target="_blank" rel="noopener">GitHub: HymalaiDFKI/OpenMarcie</a></p>
+				</article>
+			</div>
+		</section>
+
+		<section class="section" id="summary">
+			<h2>Summary</h2>
+			<p>
+				OpenMarcie is a multimodal dataset for human action monitoring in industrial environments.
+				It targets key limitations of existing datasets by providing synchronized multimodal signals,
+				more realistic open-ended workflows, and diverse participants. The dataset captures both
+				wearable and camera-based observations under two experimental settings: bicycle assembly/disassembly
+				and 3D-printer assembly with guided procedural knowledge. OpenMarcie is benchmarked on three tasks:
+				activity classification, open-vocabulary captioning, and cross-modal alignment.
+			</p>
+			<div class="stats">
+				<div class="stat"><div class="value">37+ hrs</div><div class="label">Recorded Data</div></div>
+				<div class="stat"><div class="value">36</div><div class="label">Participants</div></div>
+				<div class="stat"><div class="value">8</div><div class="label">Data Types</div></div>
+				<div class="stat"><div class="value">200+</div><div class="label">Channels</div></div>
+			</div>
+		</section>
+
+		<section class="section" id="dataset">
+			<h2>Dataset Overview</h2>
+			<div class="grid">
+				<article class="mini-card">
+					<h3>Setting A: Bicycle Task</h3>
+					<p>12 participants perform assembly/disassembly under semi-realistic, non-protocol conditions.</p>
+				</article>
+				<article class="mini-card">
+					<h3>Setting B: 3D-Printer Task</h3>
+					<p>24 valid participants follow manufacturer instructions and collaborative correction steps.</p>
+				</article>
+				<article class="mini-card">
+					<h3>Multimodal Sources</h3>
+					<p>Wearables, egocentric/exocentric vision, and audio streams are synchronized end-to-end.</p>
+				</article>
+				<article class="mini-card">
+					<h3>Industrial Relevance</h3>
+					<p>Captures long-horizon, procedural, real-world workflows beyond short isolated actions.</p>
+				</article>
+			</div>
+		</section>
+
+		<section class="section" id="figures">
+			<h2>Sensor Placement & Scenarios</h2>
+			<div class="figure-grid">
+				<article class="figure-card">
+					<h3>Scenario Layouts (Ad-hoc + Procedural)</h3>
+					<div class="figure-frame">
+						<a href="assets/figures/Marcie2.png" target="_blank" rel="noopener">
+							<img src="assets/figures/Marcie2.png" alt="Scenario layouts and exocentric camera views" loading="lazy" />
+						</a>
+					</div>
+					<div class="figure-note">Experiment room setting and exocentric camera views for both scenarios.</div>
+				</article>
+
+				<article class="figure-card">
+					<h3>Wearable Sensor Placement</h3>
+					<div class="figure-frame">
+						<a href="assets/figures/Marcie3.png" target="_blank" rel="noopener">
+							<img src="assets/figures/Marcie3.png" alt="Wearable sensor placement across scenarios" loading="lazy" />
+						</a>
+					</div>
+					<div class="figure-note">Participant wearable setup and multimodal sensor signals in Scenario (a) and (b).</div>
+				</article>
+
+				<article class="figure-card">
+					<h3>Two Scenarios with Labels</h3>
+					<div class="figure-frame">
+						<a href="assets/figures/Marcie4_ScenariosNames.png" target="_blank" rel="noopener">
+							<img src="assets/figures/Marcie4_ScenariosNames.png" alt="Egocentric and exocentric scenario examples with labels" loading="lazy" />
+						</a>
+					</div>
+					<div class="figure-note">Egocentric/exocentric activity examples with soft and hard annotations for both scenarios.</div>
+				</article>
+			</div>
+		</section>
+
+		<section class="section" id="statistics">
+			<h2>Dataset Statistics</h2>
+			<div class="figure-grid">
+				<article class="figure-card">
+					<h3>Participant Statistics</h3>
+					<div class="figure-frame">
+						<a href="assets/figures/Marcie5_Bars.png" target="_blank" rel="noopener">
+							<img src="assets/figures/Marcie5_Bars.png" alt="Participant statistics" loading="lazy" />
+						</a>
+					</div>
+					<div class="figure-note">Height, age, experience level, and academic/professional distribution.</div>
+				</article>
+
+				<article class="figure-card">
+					<h3>Ownership & Usage Habits</h3>
+					<div class="figure-frame">
+						<a href="assets/figures/Marcie7.png" target="_blank" rel="noopener">
+							<img src="assets/figures/Marcie7.png" alt="Ownership and usage habits" loading="lazy" />
+						</a>
+					</div>
+					<div class="figure-note">Participant ownership and usage patterns for bicycles vs 3D printers.</div>
+				</article>
+
+				<article class="figure-card">
+					<h3>Activity Distribution</h3>
+					<div class="figure-frame">
+						<a href="assets/figures/Marcie8_Bars.png" target="_blank" rel="noopener">
+							<img src="assets/figures/Marcie8_Bars.png" alt="Activity distribution across both scenarios" loading="lazy" />
+						</a>
+					</div>
+					<div class="figure-note">OpenMarcie action frequency for ad-hoc and procedural scenarios.</div>
+				</article>
+			</div>
+		</section>
+
+		<section class="section" id="benchmark">
+			<h2>Benchmarks & Tasks</h2>
+			<p><strong>Done (validated in this paper):</strong></p>
+			<div class="grid">
+				<article class="mini-card">
+					<h3>Human Activity Recognition (HAR)</h3>
+					<p>Recognize worker actions from multimodal streams in manufacturing scenes.</p>
+				</article>
+				<article class="mini-card">
+					<h3>Open-Vocabulary Captioning</h3>
+					<p>Generate free-form textual descriptions of ongoing industrial activities.</p>
+				</article>
+				<article class="mini-card">
+					<h3>Cross-Modal Alignment</h3>
+					<p>Learn consistent representations across wearable and visual modalities.</p>
+				</article>
+			</div>
+
+			<p style="margin-top:1rem;"><strong>TODO (from Supplementary roadmap):</strong></p>
+			<div class="grid">
+				<article class="mini-card">
+					<h3>Procedural Planning & Task Decomposition</h3>
+					<p>Model long-horizon workflows, task graphs, dependencies, and sequence decomposition.</p>
+				</article>
+				<article class="mini-card">
+					<h3>Skill Assessment & Expertise Modeling</h3>
+					<p>Estimate proficiency and learning progression; support adaptive training interventions.</p>
+				</article>
+				<article class="mini-card">
+					<h3>Intent Prediction & Early Forecasting</h3>
+					<p>Predict upcoming goals/actions from partial multimodal context for proactive assistance.</p>
+				</article>
+				<article class="mini-card">
+					<h3>Fine-Grained Segmentation & Roles</h3>
+					<p>Handle overlapping multi-label actions, temporal boundaries, and role dynamics.</p>
+				</article>
+				<article class="mini-card">
+					<h3>Pose & Body-Language Reasoning</h3>
+					<p>Advance pose estimation, pose forecasting, and non-verbal intent understanding.</p>
+				</article>
+				<article class="mini-card">
+					<h3>Cross-Modal Knowledge Transfer</h3>
+					<p>Use one modality to supervise another via distillation, dropout robustness, and unsupervised alignment.</p>
+				</article>
+				<article class="mini-card">
+					<h3>Cross-Modal Generation & Simulation</h3>
+					<p>Generate missing modalities and improve simulation-to-reality transfer with synthetic augmentation.</p>
+				</article>
+			</div>
+		</section>
+
+		<section class="section" id="citation">
+			<h2>Citation</h2>
+			<pre>@inproceedings{bello2026openmarcie,
+	title     = {OpenMarcie: Dataset for Multimodal Action Recognition in Industrial Environments},
+	author    = {Bello, Hymalai and Ray, Lala and Sorysz, Joanna and Suh, Sungho and Lukowicz, Paul},
+	booktitle = {Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)},
+	year      = {2026}
+}</pre>
+		</section>
+	</main>
+
+	<footer>
+		© 2026 OpenMarcie Project Page · Built for CVPR-style paper presentation
+	</footer>
+</body>
+</html>
